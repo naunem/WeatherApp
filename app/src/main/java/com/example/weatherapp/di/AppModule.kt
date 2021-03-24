@@ -1,6 +1,6 @@
 package com.example.weatherapp.di
 
-import com.example.navigationcomponentbaseproject.util.Constants
+import com.example.weatherapp.util.Constants
 import com.example.weatherapp.BuildConfig
 import com.example.weatherapp.data.service.ApiService
 import com.example.weatherapp.data.source.remote.RemoteDataSource

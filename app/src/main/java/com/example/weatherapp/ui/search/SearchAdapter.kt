@@ -7,6 +7,9 @@ import com.example.weatherapp.databinding.ItemSearchResultBinding
 import com.example.weatherapp.ui.base.BaseListAdapter
 
 class SearchAdapter : BaseListAdapter<Location>(DiffItemCallBack()) {
+
+    internal var onItemFavoriteClick: (location: Location) -> Unit = {}
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
         return ViewHolder(
             ItemSearchResultBinding.inflate(
@@ -19,12 +22,26 @@ class SearchAdapter : BaseListAdapter<Location>(DiffItemCallBack()) {
 
     inner class ViewHolder(private val binding: ItemSearchResultBinding) :
         ItemViewHolder(binding.root) {
+
+        init {
+            binding.imgFavorite.run {
+                setOnClickListener {
+                    isSelected = !isSelected
+                    getItem(adapterPosition).apply {
+                        isFavorite = isSelected
+                        onItemFavoriteClick(this)
+                    }
+                }
+            }
+        }
+
         override fun onBind(position: Int) {
-            itemView.run {
+            binding.run {
                 getItem(position).run {
-                    binding.tvTitle.text = title
-                    binding.tvCity.text = locationType
-                    binding.tvLatLong.text = latLong
+                    tvTitle.text = title
+                    tvCity.text = locationType
+                    tvLatLong.text = latLong
+                    imgFavorite.isSelected = isFavorite
                 }
             }
         }

@@ -14,7 +14,11 @@ import dagger.hilt.android.AndroidEntryPoint
 class SearchFragment : BaseFragment<FragmentSearchBinding>(R.layout.fragment_search) {
     private val viewModel: SearchViewModel by viewModels()
     private val searchAdapter by lazy {
-        SearchAdapter()
+        SearchAdapter().apply {
+            onItemFavoriteClick = {
+                viewModel.handleFavoriteLocation(it)
+            }
+        }
     }
 
     override fun getViewBinding(): FragmentSearchBinding =
