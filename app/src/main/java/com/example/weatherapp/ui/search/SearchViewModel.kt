@@ -20,19 +20,31 @@ class SearchViewModel @Inject constructor(
 ) : BaseViewModel() {
 
     private val searchResultLiveData = MutableLiveData<List<Location>>()
+    private val errorApiLiveData = MutableLiveData<String>()
+    private val loadingLiveData = MutableLiveData<Boolean>()
 
     internal fun getSearchResultLiveData(): LiveData<List<Location>> = searchResultLiveData
 
+    internal fun getErrorApiLiveData(): LiveData<String> = errorApiLiveData
+
+    internal fun getLoadingLiveData(): LiveData<Boolean> = loadingLiveData
+
     internal fun searchLocation(query: String) {
         viewModelScope.launch(Dispatchers.IO) {
+            loadingLiveData.postValue(true)
             when (val response = repository.searchLocationByName(query)) {
                 is ResultWrapper.Success -> {
                     applyFavoriteLocation(response.value)
                 }
-                else -> {
-
+                is ResultWrapper.GenericError -> {
+                    errorApiLiveData.postValue(response.message)
                 }
+                is ResultWrapper.NetworkError -> {
+                    errorApiLiveData.postValue(response.io.message)
+                }
+                else -> Unit
             }
+            loadingLiveData.postValue(false)
         }
     }
 

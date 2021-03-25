@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">WeatherApp</string>
     <string name="fragment_search_text_find_location_hint">Find location</string>
+    <string name="dialog_text_ok">OK</string>
 </resources>
